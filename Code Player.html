@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./jqueryuifiles/jquery-ui.min.css" type="text/css">
+    <script src="./jqueryuifiles/external/jquery/jquery.js" type="text/javascript"></script>
+    <script src="./jqueryuifiles/jquery-ui.min.js" type="text/javascript"></script>
+    <title>Code Player</title>
+</head>
+<style>
+body{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+#header{
+    background: #EEE;
+    height:34px;
+    padding: 4px;
+}
+
+#logo{
+    font-weight: bold;
+    float: left;
+    font-size: 1.5rem;
+}
+#buttonContainer{
+    width: 300px;
+    margin: 0 auto;
+}
+.toggleButton{
+    float: left;
+    padding: 6px;
+    background-color: #CCC;
+    border: 1px solid #AAA;
+    border-right: none;
+}
+#output{
+    border-right: 1px solid #AAA;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#html{
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.toggleButton:hover{
+    cursor: pointer;
+}
+.highlightedButton{
+    background-color: aliceblue;
+}
+.active{
+    background-color: paleturquoise;
+}
+.hidden{
+    display: none;
+}
+.panel{
+    float: left;
+}
+iframe{
+    border: none;
+}
+textarea{
+    border-top: none;
+    resize: none;
+}
+</style>
+
+<body>
+ 
+    <div id="header">
+        <div id="logo">
+            Code Player
+        </div>
+
+        <div id="buttonContainer">
+            <div class="toggleButton  active" id="html">HTML</div>
+            <div class="toggleButton" id="css">CSS</div>
+            <div class="toggleButton" id="js">javascript</div>
+            <div class="toggleButton active" id="output">Output</div>
+
+
+        </div>
+    </div>
+
+    <div id="bodyContainer">
+
+        <textarea class="panel" id="htmlPanel" placeholder="HTMLSection"></textarea>
+        <textarea class="panel hidden" id="cssPanel"  placeholder="CSS  Section"></textarea>
+        <textarea class="panel  hidden" id="jsPanel"   placeholder="JS Section"></textarea>
+        <iframe class="panel" id="outputPanel"></iframe>
+
+    </div>
+
+    <script>
+        
+    function  outputPanel(){
+    
+        $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style><body>" + $("#htmlPanel").val() + "</body></html>");
+    
+            document.getElementById("outputPanel").contentWindow.eval($("#jsPanel").val());
+    
+    }
+    
+    $(".toggleButton").hover(function() {
+        $(this).addClass("highlightedBtn");
+    } , function(){
+    
+          $(this).removeClass("highlightedBtn");
+    });
+    
+    $(".toggleButton").click(function(){
+        $(this).toggleClass("active");
+    
+        $(this).removeClass("highlightedBtn");
+    
+        var panelId = $(this).attr("id") + "Panel";
+    
+        $("#" + panelId).toggleClass("hidden");
+    
+        var activePanel= 4 - $(".hidden").length;
+    
+        $(".panel").width(($(window).width() / activePanel) - 10);
+    });
+    
+    $(".panel").height($(window).height() - $("#header").height() - 15);
+    
+    $(".panel").width(($(window).width()/ 2) - 10);
+    
+     outputPanel();
+    
+    $("textarea").on('change  keyup  paste' ,function(){
+        outputPanel();
+    })
+    </script>
+    
+</body>
+
+
+</html>
+
+
+
+
+
